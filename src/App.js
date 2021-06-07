@@ -7,16 +7,26 @@ mapboxgl.accessToken =
 export default function App() {
   const mapContainer = useRef(null);
   const map = useRef(null);
-  const [lng, setLng] = useState(-70.9);
-  const [lat, setLat] = useState(42.35);
+  const [homeLng, setHomeLng] = useState(-70.9);
+  const [homeLat, setHomeLat] = useState(42.35);
+  const [salesmanLng, setSalesmanLng] = useState(-70.9);
+  const [salesmanLat, setSalesmanLat] = useState(42.35);
   const [zoom, setZoom] = useState(9);
+
+  // Create a new marker
+  // let marker = document.createElement('div');
+  // marker.classList = 'salesman';
+  // const salesmanLocation = [salesmanLat, salesmanLng];
+  // const salesmanMarker = new mapboxgl.Marker(marker)
+  //   .setLngLat(salesmanLocation)
+  //   .addTo(map);
 
   useEffect(() => {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: [lng, lat],
+      center: [homeLng, homeLat],
       zoom: zoom
     });
   });
@@ -24,8 +34,8 @@ export default function App() {
   useEffect(() => {
     if (!map.current) return; // wait for map to initialize
     map.current.on('move', () => {
-      setLng(map.current.getCenter().lng.toFixed(4));
-      setLat(map.current.getCenter().lat.toFixed(4));
+      setSalesmanLng(map.current.getCenter().lng.toFixed(4));
+      setSalesmanLat(map.current.getCenter().lat.toFixed(4));
       setZoom(map.current.getZoom().toFixed(2));
     });
   });
@@ -33,7 +43,7 @@ export default function App() {
   return (
     <div>
       <div className="sidebar">
-        Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
+        Longitude: {salesmanLng} | Latitude: {salesmanLat} | Zoom: {zoom}
       </div>
       <div ref={mapContainer} className="map-container" />
     </div>
