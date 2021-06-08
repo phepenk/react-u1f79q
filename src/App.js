@@ -14,12 +14,10 @@ export default function App() {
   const [zoom, setZoom] = useState(9);
 
   // Create a new marker
-  // let marker = document.createElement('div');
-  // marker.classList = 'salesman';
-  // const salesmanLocation = [salesmanLat, salesmanLng];
-  // const salesmanMarker = new mapboxgl.Marker(marker)
-  //   .setLngLat(salesmanLocation)
-  //   .addTo(map);
+  const salesmanLocation = [salesmanLat, salesmanLng];
+  const salesmanMarker = new mapboxgl.Marker()
+    .setLngLat(salesmanLocation)
+    .addTo(map);
 
   useEffect(() => {
     if (map.current) return; // initialize map only once
