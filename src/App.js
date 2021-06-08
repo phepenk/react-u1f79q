@@ -13,14 +13,8 @@ export default function App() {
   const [salesmanLat, setSalesmanLat] = useState(42.35);
   const [zoom, setZoom] = useState(9);
 
-  // Create a new marker
-  const salesmanLocation = [salesmanLat, salesmanLng];
-  const salesmanMarker = new mapboxgl.Marker()
-    .setLngLat(salesmanLocation)
-    .addTo(map);
-
   useEffect(() => {
-    if (map.current) return; // initialize map only once
+    if (map.current) return; // wait for map to initialize
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v11',
@@ -36,6 +30,15 @@ export default function App() {
       setSalesmanLat(map.current.getCenter().lat.toFixed(4));
       setZoom(map.current.getZoom().toFixed(2));
     });
+  });
+
+  useEffect(() => {
+    if (!map.current) return;
+    // Create a new marker
+    const salesmanLocation = [salesmanLng, salesmanLat];
+    const salesmanMarker = new mapboxgl.Marker()
+      .setLngLat(salesmanLocation)
+      .addTo(map);
   });
 
   return (
