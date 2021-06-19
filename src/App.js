@@ -4,6 +4,7 @@ import 'mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import React, { useState, useRef, useCallback, useMemo } from 'react';
 import MapGL, { Marker } from 'react-map-gl';
 import Geocoder from 'react-map-gl-geocoder';
+import Pin from './pin.js';
 import CLIENTS from './clients.json';
 
 const mbxClient = require('@mapbox/mapbox-sdk');
@@ -19,6 +20,7 @@ function initMarkers(places) {
     <Marker key={o.address} longitude={o.lng} latitude={o.lat}>
       {index === 0 && <div>Home</div>}
       {index > 0 && <div>Client {index}</div>}
+      <Pin size={20} onClick={() => this.setState({ selectedPin: o })} />
     </Marker>
   ));
 }
