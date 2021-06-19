@@ -3,8 +3,16 @@ import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import 'mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import React, { useState, useRef, useCallback, useMemo } from 'react';
 import MapGL, { Marker } from 'react-map-gl';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider
+} from 'react-query';
 import Geocoder from 'react-map-gl-geocoder';
 import Pin from './pin.js';
+import WebApi from './web-api.js';
 import CLIENTS from './clients.json';
 
 const mbxClient = require('@mapbox/mapbox-sdk');
@@ -90,28 +98,43 @@ export default function App(props) {
     []
   );
 
+  const queryClient = new QueryClient();
+
+  // Query optimisation API
+  //  const query = useQuery('todos', getTodos)
+
+  // Mutations
+  //  const mutation = useMutation(postTodo, {
+  //    onSuccess: () => {
+  //      // Invalidate and refetch
+  //      queryClient.invalidateQueries('todos')
+  //    },
+  //  })
+
   return (
-    <div style={{ height: '100vh' }}>
-      <MapGL
-        ref={mapRef}
-        {...viewport}
-        width="100%"
-        height="100%"
-        onViewportChange={handleViewportChange}
-        mapboxApiAccessToken={MAPBOX_TOKEN}
-        mapStyle="mapbox://styles/mapbox/light-v10"
-        onInteractionStateChange={s => setInteractionState({ ...s })}
-        onLoad={onMapLoad}
-      >
-        <Geocoder
-          mapRef={mapRef}
-          onViewportChange={handleGeocoderViewportChange}
+    <QueryClientProvider client={queryClient}>
+      <div style={{ height: '100vh' }}>
+        <MapGL
+          ref={mapRef}
+          {...viewport}
+          width="100%"
+          height="100%"
+          onViewportChange={handleViewportChange}
           mapboxApiAccessToken={MAPBOX_TOKEN}
-          position="top-left"
-          marker={true}
-        />
-        {initMarkers(places)}
-      </MapGL>
-    </div>
+          mapStyle="mapbox://styles/mapbox/light-v10"
+          onInteractionStateChange={s => setInteractionState({ ...s })}
+          onLoad={onMapLoad}
+        >
+          <Geocoder
+            mapRef={mapRef}
+            onViewportChange={handleGeocoderViewportChange}
+            mapboxApiAccessToken={MAPBOX_TOKEN}
+            position="top-left"
+            marker={true}
+          />
+          {initMarkers(places)}
+        </MapGL>
+      </div>
+    </QueryClientProvider>
   );
 }
